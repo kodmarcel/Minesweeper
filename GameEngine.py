@@ -42,15 +42,17 @@ class GameEngine():
 
     def ExposeBlock(self,x,y):
         '''method that makes player move, changes shown field and returns player state'''
-        block=x*self.width+y
+        block=y*self.width+x
         if block>self.size or block<0:#checking if input is wrong
             print('Wrong input')
             return self.alive
+
+        
         if self.shownField[block]=='F':#checking if block has been flagged by player
             print('You belive there may be a mine! If you really want to unflag this block, right click it')
             return self.alive
         
-        if self.shownField[block]!='X':#checking if block is already exposed
+        elif self.shownField[block]!='X':#checking if block is already exposed
             print('Block already exposed')
             return self.alive
         
@@ -61,9 +63,11 @@ class GameEngine():
             self.shownField[block]=self.field[block]#showing clicked block to player
         return self.alive
 
+
+
     def ManageFlags(self,x,y):
         '''Method that puts or takes a flag from block'''
-        block=x*self.width+y
+        block=y*self.width+x
         if self.shownField[block]=='X':#if block is unexposed we flag it
             self.minesActive-=1#player thinks he eliminated one mine-> we show him number of remaining ones
             self.shownField[block]='F'
@@ -73,6 +77,8 @@ class GameEngine():
         else:
             print("Can't flag this")
         return
+
+    
     def GetStatus(self):
         '''Method that returns current shownField and minesActive'''
         return self.shownField,self.minesActive

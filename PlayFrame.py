@@ -23,12 +23,11 @@ class PlayFrame(tk.Frame):
         
 
         
-    def paint(self,activeMines,shownField):
+    def Paint(self,activeMines,shownField):
         '''Function to paint on screen'''
         
         self.minesIndicator['text']=activeMines
-        
-        self.canvas.delete('ALL')
+        self.canvas.delete('all')
         for i in range(self.size):
             block=shownField[i]
             self.canvas.create_rectangle(\
@@ -36,18 +35,18 @@ class PlayFrame(tk.Frame):
                 (i%self.width)*self.blockWidth+self.blockWidth,\
                 (i//self.width)*self.blockHeight+self.blockHeight)
                
-            if block=='X':
-                pass
-            elif block=='F':
+            
+            if block=='F':
                 self.canvas.create_text(\
                 (i%self.width)*self.blockWidth+self.blockWidth//2,(i//self.width)*self.blockHeight+self.blockHeight//2,\
-                                        text='F',width=10)
+                                        text='F',fill="blue",width=10)
 
             elif block=='M':
                self.canvas.create_text(\
                 (i%self.width)*self.blockWidth+self.blockWidth//2,(i//self.width)*self.blockHeight+self.blockHeight//2,\
-                                        text='M',width=10)
-
+                                        text='M',fill="red",width=10)
+            elif block=='X':
+                pass
             elif 0<=block<=8 :
                  self.canvas.create_text(\
                 (i%self.width)*self.blockWidth+self.blockWidth//2,(i//self.width)*self.blockHeight+self.blockHeight//2,\
