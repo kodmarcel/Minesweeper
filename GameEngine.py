@@ -73,12 +73,10 @@ class GameEngine():
         else:
             print("Can't flag this")
         return
-    def GetShownField(self):
-        '''Method that returns current shownField'''
-        return self.shownField
-    def GetMinesActive(self):
-        '''Method that returns current acitveMines'''
-        return self.minesActive
+    def GetStatus(self):
+        '''Method that returns current shownField and minesActive'''
+        return self.shownField,self.minesActive
+
 
 
 

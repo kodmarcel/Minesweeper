@@ -1,29 +1,56 @@
 #imports
 import sys
 import tkinter as tk
-import random
 
 
-class PlayFrame():
-    def __init__(self,width,height,shownField,ActiveMines):
+class PlayFrame(tk.Frame):
+    def __init__(self,parent,height,width,blockHeight,blockWidth):
+        tk.Frame.__init__(self,parent)
+        self.parent=parent
+        self.height=height
+        self.width=width
+        self.size=width*height
+        self.blockWidth=blockWidth
+        self.blockHeight=blockHeight
 
+        #widgets
+        self.minesIndicator=tk.Label(self,fg='red',bg='black')
+        self.canvas=tk.Canvas(self,\
+            height=self.height*self.blockHeight,width=self.width*self.blockWidth,bg="grey")
 
-#functions
-def minesInVicinity(mines, i, j,width):
-    neighbourMines=0
-    position=i*width+j
-    neighbours=[position-width-1,position-width,position-width+1,position+width+1,position-width-1,position-width,position-1,position+1]
-    for mine in mines:
-        if mine in neighbours:
-            neighbourMines+=1
-        elif mine==position:
-            neighbourMines='M'
-            break
+        self.minesIndicator.pack()
+        self.canvas.pack()
+        
 
-    return neighbourMines
+        
+    def paint(self,activeMines,shownField):
+        '''Function to paint on screen'''
+        
+        self.minesIndicator['text']=activeMines
+        
+        self.canvas.delete('ALL')
+        for i in range(self.size):
+            block=shownField[i]
+            self.canvas.create_rectangle(\
+                (i%self.width)*self.blockWidth,(i//self.width)*self.blockHeight,\
+                (i%self.width)*self.blockWidth+self.blockWidth,\
+                (i//self.width)*self.blockHeight+self.blockHeight)
+               
+            if block=='X':
+                pass
+            elif block=='F':
+                self.canvas.create_text(\
+                (i%self.width)*self.blockWidth+self.blockWidth//2,(i//self.width)*self.blockHeight+self.blockHeight//2,\
+                                        text='F',width=10)
 
+            elif block=='M':
+               self.canvas.create_text(\
+                (i%self.width)*self.blockWidth+self.blockWidth//2,(i//self.width)*self.blockHeight+self.blockHeight//2,\
+                                        text='M',width=10)
 
+            elif 0<=block<=8 :
+                 self.canvas.create_text(\
+                (i%self.width)*self.blockWidth+self.blockWidth//2,(i//self.width)*self.blockHeight+self.blockHeight//2,\
+                                        text=str(block),width=10)
 
-#paint function
-def paint():
-    minesIndicator=Label(playGui,text=str(minesAmount),fg='red',bg='black')
+        
