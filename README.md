@@ -3,6 +3,8 @@ Minesweeper
 
 A minesweper game made in python with tkinter
 
+works with python 3.x
+
 TO PLAY: download all python files,extract to same directory and run Main.py
 
 
