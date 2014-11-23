@@ -32,7 +32,12 @@ class GameEngine():
         '''method that returns amount of mines in neighbouring blocks of a block i'''
         if i in mines:return 'M'#M indicates that there is a mine in the block
         width=self.width
-        vicinity=[i-width-1,i-width,i-width+1,i-1,i+1,i+width-1,i+width,i+width+1]
+        vicinity=[i-width-1,i-1,i+width-1,i-width,i+width,i-width+1,i+1,i+width+1]
+        nearLeftEdge=i%width==0
+        nearRightEdge=i%width==width-1
+        if nearLeftEdge:vicinity=vicinity[3:]#excluding blocks that are on other side of the field
+        elif nearRightEdge:vicinity=vicinity[:-3]
+        
         amount=0
         for mine in mines:
             if mine in vicinity:

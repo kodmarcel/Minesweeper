@@ -2,7 +2,7 @@
 from GameEngine import GameEngine as GE
 from PlayFrame import PlayFrame as PF
 import sys
-from tkinter import Tk
+from tkinter import Tk,Label,Frame
 
 ################
 ###Main Program#
@@ -33,6 +33,8 @@ class Play():
             y=event.y//50
             self.alive=self.gameEngine.ExposeBlock(x,y)
             self.update()
+        else:
+            self.DeadFrame()
             
 
     def rightClick(self,event):
@@ -45,8 +47,19 @@ class Play():
     def update(self):
             shownField,activeMines=self.gameEngine.GetStatus()
             self.playFrame.Paint(activeMines,shownField)
-            if not self.alive:print("You died")
 
+    def DeadFrame(self):
+        self.playFrame.destroy()
+        self.deadScreen=Frame(self.playWindow,bg="black")
+        self.deadScreen.pack(fill="both", expand=1)
+        self.deadText=Label(self.deadScreen,text="You stepped on a mine!\nClick here to try again.",fg="white",bg="black")
+        self.deadText.bind("<Button-1>",self.onDeadClick)
+        self.deadText.pack()
+
+        
+    def onDeadClick(self,event):
+        self.playWindow.destroy()
+        self.StartGame(20,10,10)
 
 def main():
     '''Function to run on game start'''
