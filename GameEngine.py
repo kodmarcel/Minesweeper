@@ -57,8 +57,7 @@ class GameEngine():
             print('You belive there may be a mine! If you really want to unflag this block, right click it')
             return self.alive
         
-        elif self.shownField[block]!='X':#checking if block is already exposed
-            print('Block already exposed')
+        elif self.shownField[block]!='X':#checking if block is already exposed)
             return self.alive
         
         else:
@@ -66,6 +65,8 @@ class GameEngine():
                 self.alive=False
                 print('You died')
             self.shownField[block]=self.field[block]#showing clicked block to player
+            if self.field[block]==0:
+                self.isZero(block)
         return self.alive
 
 
@@ -82,6 +83,21 @@ class GameEngine():
         else:
             print("Can't flag this")
         return
+
+    def isZero(self,block):
+        '''function that is called when block with value 0 is exposed'''
+        vicinity=[block-self.width-1,block-1,block+self.width-1,block-self.width,block+self.width,block-self.width+1,block+1,block+self.width+1]
+        nearLeftEdge=block%self.width==0
+        nearRightEdge=block%self.width==self.width-1
+        if nearLeftEdge:vicinity=vicinity[3:]#excluding blocks that are on other side of the field
+        elif nearRightEdge:vicinity=vicinity[:-3]
+        vicinity=[x for x in vicinity if 0<=x<self.size]
+        for neighbour in vicinity:
+            xNeighbour=neighbour%self.width
+            yNeighbour=neighbour//self.width
+            self.ExposeBlock(xNeighbour,yNeighbour)
+                
+        
 
     
     def GetStatus(self):

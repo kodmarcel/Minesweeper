@@ -14,10 +14,11 @@ class Play():
     def StartGame(self,minesAmount,height,width):
         blockWidth=50
         blockHeight=50
+        self.minesAmount=minesAmount
         '''function called when we press play'''
         self.gameEngine=GE(minesAmount,height,width)
         self.playWindow=Tk()
-        self.playWindow.geometry(str(blockWidth*width+blockWidth//2)+'x'+str(blockHeight*height+blockHeight//2))#TODO: change to create a window according to field size
+        self.playWindow.geometry(str(blockWidth*width+blockWidth//2)+'x'+str(blockHeight*height+blockHeight//2)+'+200+200')#TODO: change to create a window according to field size
         self.playWindow.title("Minesweeper")
         self.playFrame=PF(self.playWindow,height,width,blockHeight,blockWidth)
         self.playFrame.canvas.bind("<Button-1>", self.leftClick)
@@ -46,25 +47,40 @@ class Play():
             
     def update(self):
             shownField,activeMines=self.gameEngine.GetStatus()
+            self.checkWin(shownField)
             self.playFrame.Paint(activeMines,shownField)
+
+    def checkWin(self,shownField):
+        currentBlocks=sum([1 for x in shownField if x=='X' or x=='F'])
+        if currentBlocks==self.minesAmount:
+            self.WinFrame()
 
     def DeadFrame(self):
         self.playFrame.destroy()
-        self.deadScreen=Frame(self.playWindow,bg="black")
+        self.deadScreen=Frame(self.playWindow,bg="red")
         self.deadScreen.pack(fill="both", expand=1)
-        self.deadText=Label(self.deadScreen,text="You stepped on a mine!\nClick here to try again.",fg="white",bg="black")
-        self.deadText.bind("<Button-1>",self.onDeadClick)
+        self.deadText=Label(self.deadScreen,text="You stepped on a mine!\nClick here to try again.",fg="black",bg="red")
+        self.deadText.bind("<Button-1>",self.onClickRestart)
         self.deadText.pack()
 
+    def WinFrame(self):
+        self.playFrame.destroy()
+        self.winScreen=Frame(self.playWindow,bg="blue")
+        self.winScreen.pack(fill="both", expand=1)
+        self.winText=Label(self.winScreen,text="You won!\nClick here to try again.",fg="yellow",bg="blue")
+        self.winText.bind("<Button-1>",self.onClickRestart)
+        self.winText.pack()
+
+
         
-    def onDeadClick(self,event):
+    def onClickRestart(self,event):
         self.playWindow.destroy()
-        self.StartGame(20,10,10)
+        self.StartGame(10,10,10)
 
 def main():
     '''Function to run on game start'''
     play=Play()
-    play.StartGame(20,10,10)#calls function to start the game
+    play.StartGame(10,10,10)#calls function to start the game
 
 
 
