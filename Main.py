@@ -47,8 +47,8 @@ class Play():
             
     def update(self):
             shownField,activeMines=self.gameEngine.GetStatus()
-            self.checkWin(shownField)
             self.playFrame.Paint(activeMines,shownField)
+            self.checkWin(shownField)
 
     def checkWin(self,shownField):
         currentBlocks=sum([1 for x in shownField if x=='X' or x=='F'])
