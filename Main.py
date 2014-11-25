@@ -2,7 +2,7 @@
 from GameEngine import GameEngine as GE
 from PlayFrame import PlayFrame as PF
 import sys
-from tkinter import Tk,Label,Frame
+from tkinter import Tk,Label,Frame,Button,messagebox,Scale,IntVar
 
 ################
 ###Main Program#
@@ -18,7 +18,7 @@ class Play():
         '''function called when we press play'''
         self.gameEngine=GE(minesAmount,height,width)
         self.playWindow=Tk()
-        self.playWindow.geometry(str(blockWidth*width+blockWidth//2)+'x'+str(blockHeight*height+blockHeight//2)+'+200+200')#TODO: change to create a window according to field size
+        self.playWindow.geometry(str(blockWidth*width+blockWidth//2)+'x'+str(blockHeight*height+blockHeight//2)+'+200+200')
         self.playWindow.title("Minesweeper")
         self.playFrame=PF(self.playWindow,height,width,blockHeight,blockWidth)
         self.playFrame.canvas.bind("<Button-1>", self.leftClick)
@@ -75,20 +75,61 @@ class Play():
         
     def onClickRestart(self,event):
         self.playWindow.destroy()
-        self.StartGame(10,10,10)
-
-def main():
-    '''Function to run on game start'''
-    play=Play()
-    play.StartGame(10,10,10)#calls function to start the game
+        main=MainMenu()
+        main.main()
 
 
 
 
 
+class MainMenu():
+    def main(self):
+        '''Function to run on game start'''
+        self.mainMenu=Tk()
+        self.mainMenu.geometry('200x300+200+200')
+        self.mainMenu.title("Minesweeper")
+        playButton=Button(self.mainMenu,text='Play',command=lambda:self.startPlay(None))
 
+        self.height= IntVar()
+        self.width= IntVar()
+        self.minesAmount= IntVar()
 
+        self.height.set(10)
+        self.width.set(10)
+        self.minesAmount.set(10)
+
+        playButton.pack()
+        
+        xSlider=Scale(self.mainMenu,orient='horizontal',length=150,width=15,label='Height',sliderlength=20,from_=1,to=15,tickinterval=0,variable=self.height).pack()
+        ySlider=Scale(self.mainMenu,orient='horizontal',length=150,width=15,label='Width',sliderlength=20,from_=1,to=15,tickinterval=0,variable=self.width).pack()      
+        minesSlider=Scale(self.mainMenu,orient='horizontal',length=150,width=15,label='Mines',sliderlength=20,from_=0,to=15*15-1,tickinterval=0,variable=self.minesAmount).pack()
+        
+        aboutButton=Button(self.mainMenu,text='About',command=self.about)
+        quitButton=Button(self.mainMenu,text='Quit',command=self.quitApp)
+
+        
+        
+        aboutButton.pack()
+        quitButton.pack()
+
+    def startPlay(self,event):
+        play=Play()
+        minesAmount=self.minesAmount.get()
+        height=self.height.get()
+        width=self.width.get()
+        if minesAmount>width*height-1:
+            messagebox.showerror(title='Error',message="Amount of mines can't be bigger than total size of the field. Plese try again.")
+            return
+        self.mainMenu.destroy()
+        play.StartGame(minesAmount,height,width)
+
+    def about(self):
+        messagebox.showinfo(title='About',message='Author:Marcel Salmič.')
+        
+    def quitApp(self):
+        self.mainMenu.destroy()
 
 
 if __name__=='__main__':
-    main()
+    main=MainMenu()
+    main.main()
