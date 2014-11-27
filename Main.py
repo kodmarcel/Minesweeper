@@ -51,9 +51,10 @@ class Play():
             self.checkWin(shownField)
 
     def checkWin(self,shownField):
-        currentBlocks=sum([1 for x in shownField if x=='X' or x=='F'])
-        if currentBlocks==self.minesAmount:
-            self.WinFrame()
+        if self.alive:
+            currentBlocks=sum([1 for x in shownField if x=='X' or x=='F'])
+            if currentBlocks==self.minesAmount:
+                self.WinFrame()
 
     def DeadFrame(self):
         self.playFrame.destroy()
